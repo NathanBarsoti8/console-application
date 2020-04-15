@@ -1,0 +1,13 @@
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\bin\Debug\netcoreapp3.1\Receive.exe
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\bin\Debug\netcoreapp3.1\Receive.deps.json
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\bin\Debug\netcoreapp3.1\Receive.runtimeconfig.json
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\bin\Debug\netcoreapp3.1\Receive.runtimeconfig.dev.json
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\bin\Debug\netcoreapp3.1\Receive.dll
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\bin\Debug\netcoreapp3.1\Receive.pdb
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\obj\Debug\netcoreapp3.1\Receive.csprojAssemblyReference.cache
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\obj\Debug\netcoreapp3.1\Receive.csproj.CoreCompileInputs.cache
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\obj\Debug\netcoreapp3.1\Receive.AssemblyInfoInputs.cache
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\obj\Debug\netcoreapp3.1\Receive.AssemblyInfo.cs
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\obj\Debug\netcoreapp3.1\Receive.dll
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\obj\Debug\netcoreapp3.1\Receive.pdb
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\obj\Debug\netcoreapp3.1\Receive.genruntimeconfig.cache
