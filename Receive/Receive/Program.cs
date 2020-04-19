@@ -1,49 +1,39 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Receive
 {
-    class MainClass
+    class Program
     {
-        static void Main()
+        static void Main(string[] args)
         {
-            MainClass main = new MainClass();
-            TcpListener server = null;
-            TcpClient client = null;
-            NetworkStream stream = null;
-
-            Byte[] bytes = new Byte[701264];
-            string data = null;
+            Int32 port = 11000;
+            UdpClient server = new UdpClient(port);
+            IPEndPoint groupEp = new IPEndPoint(IPAddress.Any, 0);
 
             try
             {
-                Int32 port = 5000;
-                IPAddress local = IPAddress.Parse("127.0.0.1");
-                server = new TcpListener(local, port);
-                server.Start();
-
                 while (true)
                 {
-                    Console.WriteLine("Trying to connect...");
-                    client = server.AcceptTcpClient();
-                    Console.WriteLine("Connected");
-                    data = null;
-                    stream = client.GetStream();
-                    int i;
+                    Console.WriteLine("Waiting for broadcast...");
 
-                    while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                    byte[] bytes = server.Receive(ref groupEp);
+                    var size = bytes.Length;
+
+                    for (int i = 0; i < size; i++)
                     {
-                        //Translate data bytes to a ASCII string
-                        data = Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine("Received: {0}", data);
-
-                        data = data.ToUpper();
-
+                        DataToReceive data = FromBytes(bytes);
+                        Console.WriteLine(data.Ip);
+                        Console.WriteLine(data.Date);
+                        Console.WriteLine(data.Url);
                     }
+                    
 
-                    client.Close();
+                    Console.WriteLine("Finished opp");
+                    //client.Close();
                 }
             }
             catch (WebException exc)
@@ -52,9 +42,33 @@ namespace Receive
             }
             finally
             {
-                server.Stop();
+                server.Close();
             }
 
+        }
+
+        public static DataToReceive FromBytes(byte[] arr)
+        {
+            DataToReceive receive = new DataToReceive();
+
+            int size = Marshal.SizeOf(receive);
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            Marshal.Copy(arr, 0, ptr, size);
+
+            receive = (DataToReceive)Marshal.PtrToStructure(ptr, receive.GetType());
+            Marshal.FreeHGlobal(ptr);
+
+            return receive;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct DataToReceive
+        {
+            public DateTime Date;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 300)]
+            public string Ip;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 300)]
+            public string Url;
         }
     }
 }
