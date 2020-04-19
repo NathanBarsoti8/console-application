@@ -23,13 +23,11 @@ namespace Receive
                     byte[] bytes = server.Receive(ref groupEp);
                     var size = bytes.Length;
 
-                    for (int i = 0; i < size; i++)
-                    {
-                        DataToReceive data = FromBytes(bytes);
-                        Console.WriteLine(data.Ip);
-                        Console.WriteLine(data.Date);
-                        Console.WriteLine(data.Url);
-                    }
+                    DataToReceive data = FromBytes(bytes);
+                    Console.WriteLine(data.Ip);
+                    Console.WriteLine(data.Date);
+                    Console.WriteLine(data.Url);
+                    
                     
 
                     Console.WriteLine("Finished opp");
