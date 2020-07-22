@@ -4,10 +4,14 @@ C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\bin\De
 C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\bin\Debug\netcoreapp3.1\Send.runtimeconfig.dev.json
 C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\bin\Debug\netcoreapp3.1\Send.dll
 C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\bin\Debug\netcoreapp3.1\Send.pdb
-C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\obj\Debug\netcoreapp3.1\Send.csprojAssemblyReference.cache
 C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\obj\Debug\netcoreapp3.1\Send.csproj.CoreCompileInputs.cache
 C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\obj\Debug\netcoreapp3.1\Send.AssemblyInfoInputs.cache
 C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\obj\Debug\netcoreapp3.1\Send.AssemblyInfo.cs
 C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\obj\Debug\netcoreapp3.1\Send.dll
 C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\obj\Debug\netcoreapp3.1\Send.pdb
 C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\obj\Debug\netcoreapp3.1\Send.genruntimeconfig.cache
+C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\bin\Debug\netcoreapp3.1\Receive.dll
+C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
+C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\bin\Debug\netcoreapp3.1\Receive.pdb
+C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\obj\Debug\netcoreapp3.1\Send.csprojAssemblyReference.cache
+C:\Users\nathan.barsoti\Desktop\application\console-application\Send\Send\obj\Debug\netcoreapp3.1\Send.csproj.CopyComplete

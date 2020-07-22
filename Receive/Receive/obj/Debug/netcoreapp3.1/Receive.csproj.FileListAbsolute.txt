@@ -18,3 +18,5 @@ C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\
 C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\obj\Debug\netcoreapp3.1\Receive.csproj.CoreCompileInputs.cache
 C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\obj\Debug\netcoreapp3.1\Receive.csproj.CopyComplete
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\bin\Debug\netcoreapp3.1\Send.dll
+C:\Users\nathan.barsoti\Desktop\application\console-application\Receive\Receive\bin\Debug\netcoreapp3.1\Send.pdb

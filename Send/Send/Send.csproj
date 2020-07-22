@@ -1,8 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Send.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Receive">
+      <HintPath>..\..\Receive\Receive\bin\Debug\netcoreapp3.1\Receive.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
 </Project>

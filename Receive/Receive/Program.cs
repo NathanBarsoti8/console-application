@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Receive
 {
@@ -15,31 +17,32 @@ namespace Receive
         {
             MainClass main = new MainClass();
             Int32 port = 11000;
-            UdpClient server = new UdpClient(port);
-            IPEndPoint groupEp = new IPEndPoint(IPAddress.Any, 0);
+
+            TcpListener server = null;
+            TcpClient client = null;
+            NetworkStream stream = null;
+            byte[] bytes = new Byte[16000000];
+            List<Data> data = new List<Data>();
 
             try
             {
-                while (true)
-                {
-                    Console.WriteLine("Waiting for broadcast...");
+                IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+                server = new TcpListener(localAddr, port);
+                server.Start();
+                Console.WriteLine("Waiting for a connection...");
 
-                    byte[] bytes = server.Receive(ref groupEp);
-                    var size = bytes.Length;
+                client = server.AcceptTcpClient();
+                Console.WriteLine("Connected!");
+                stream = client.GetStream();
+                stream.Read(bytes, 0, bytes.Length);
 
-                    DataToReceive data = FromBytes(bytes);
-                    Console.WriteLine(data.Ip);
-                    Console.WriteLine(data.Date);
-                    Console.WriteLine(data.Url);
+                var memory = new MemoryStream();
+                var binForm = new BinaryFormatter();
+                memory.Write(bytes, 0, bytes.Length);
+                memory.Position = 0;
+                data = binForm.Deserialize(memory) as List<Data>;
 
-
-                    int i = 1;
-                    Console.WriteLine("Finished opp");
-                    Console.WriteLine("count");
-                    Console.WriteLine(i++);
-                    //client.Close();
-                    main.InsertInDb(data);
-                }
+                main.InsertInDb(data);
             }
             catch (WebException exc)
             {
@@ -47,12 +50,14 @@ namespace Receive
             }
             finally
             {
-                server.Close();
+                //TODO: método para acessar a url;
+                stream.Close();
+                client.Close();
             }
 
         }
 
-        public void InsertInDb(DataToReceive data)
+        public void InsertInDb(List<Data> list)
         {
             string connectionString = @"Data Source = N092\SQLEXPRESS;" +
                                       "Integrated Security=true;" +
@@ -68,14 +73,17 @@ namespace Receive
                     table.Columns.Add("Date", typeof(DateTime));
                     table.Columns.Add("Url", typeof(string));
 
-                    DataRow row = table.NewRow();
+                    foreach(Data data in list)
+                    {
+                        DataRow row = table.NewRow();
 
-                    row["Id"] = Guid.NewGuid();
-                    row["Ip"] = data.Ip;
-                    row["Date"] = data.Date;
-                    row["Url"] = data.Url;
+                        row["Id"] = Guid.NewGuid();
+                        row["Ip"] = data.Ip;
+                        row["Date"] = data.Date;
+                        row["Url"] = data.Url;
 
-                    table.Rows.Add(row);
+                        table.Rows.Add(row);
+                    }
                     
                     SqlBulkCopy bulkCopy = new SqlBulkCopy(connection);
                     bulkCopy.DestinationTableName = "Info";
@@ -95,28 +103,16 @@ namespace Receive
             }
         }
 
-        public static DataToReceive FromBytes(byte[] arr)
-        {
-            DataToReceive receive = new DataToReceive();
+        //public static List<Data> ToClass(byte[] bytes)
+        //{
+        //    MemoryStream memStream = new MemoryStream();
+        //    var binForm = new BinaryFormatter();
+        //    memStream.Write(bytes, 0, bytes.Length);
+        //    memStream.Seek(0, SeekOrigin.Begin);
+        //    List<Data> obj = binForm.Deserialize(memStream) as List<Data>;
+        //    return obj;
+        //}
 
-            int size = Marshal.SizeOf(receive);
-            IntPtr ptr = Marshal.AllocHGlobal(size);
-            Marshal.Copy(arr, 0, ptr, size);
 
-            receive = (DataToReceive)Marshal.PtrToStructure(ptr, receive.GetType());
-            Marshal.FreeHGlobal(ptr);
-
-            return receive;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct DataToReceive
-        {
-            public DateTime Date;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 300)]
-            public string Ip;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 300)]
-            public string Url;
-        }
     }
 }

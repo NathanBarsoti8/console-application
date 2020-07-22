@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 
 namespace Send
@@ -11,11 +15,16 @@ namespace Send
     {
         static void Main(string[] args)
         {
+            NetworkStream stream = null;
+
             try
             {
                 Int32 port = 11000;
-                UdpClient client = new UdpClient("127.0.0.1", port);
                 Console.WriteLine("Reading the doc, wait...");
+                IPEndPoint groupEp = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
+
+                TcpClient client = new TcpClient("127.0.0.1", port);
+                var sendList = new List<Data>();
 
                 using (StreamReader text = new StreamReader(@"C:\Users\nathan.barsoti\Desktop\application\console-application\access (1).log"))
                 {
@@ -24,6 +33,9 @@ namespace Send
                     Regex rgx = new Regex(formatPattern);
 
                     string x;
+                    Stopwatch watch = new Stopwatch();
+                    watch.Start();
+
                     while ((x = text.ReadLine()) != null)
                     {
                         if (rgx.IsMatch(x))
@@ -35,20 +47,29 @@ namespace Send
                             double parseDouble = Double.Parse(date);
                             DateTime r_date = new DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(parseDouble);
 
-                            DataToSend send = new DataToSend();
+                            Data send = new Data();
                             send.Date = r_date;
                             send.Ip = ip;
                             send.Url = url;
 
-                            var bytes = GetBytes(send);
-                            client.Send(bytes, bytes.Length);
+                            sendList.Add(send);
                         }
                     }
 
+                    watch.Stop();
+                    Console.WriteLine("Time (seconds) to read and parse: {0}", watch.ElapsedMilliseconds / 1000f);
+
+                    var listConverted = ConvertToByte(sendList);
+
+                    stream = client.GetStream();
+                    stream.Write(listConverted, 0, listConverted.Length);
+
                     Console.WriteLine("Read all doc and transfered");
 
+                    stream.Close();
                     client.Close();
-                    Console.ReadKey();
+
+                    Console.WriteLine("Connection is closed");
                 }
             }
 
@@ -58,27 +79,16 @@ namespace Send
             }
         }
 
-        public static byte[] GetBytes(DataToSend send)
+        public static byte[] ConvertToByte(List<Data> list)
         {
-            int size = Marshal.SizeOf(send);
-            byte[] arr = new byte[size];
+            BinaryFormatter binFormat = new BinaryFormatter();
+            MemoryStream mStream = new MemoryStream();
+            binFormat.Serialize(mStream, list);
 
-            IntPtr ptr = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(send, ptr, false);
-            Marshal.Copy(ptr, arr, 0, size);
-            Marshal.FreeHGlobal(ptr);
+            byte[] bytes = mStream.ToArray();
+            mStream.Flush();
 
-            return arr;
+            return bytes;
         }
-
-        public struct DataToSend
-        {
-            public DateTime Date;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 300)]
-            public string Ip;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 300)]
-            public string Url;
-        }
-
     }
 }
